@@ -10,7 +10,10 @@ import (
 )
 
 var depth uint
+const MAXDEPTH = 6
 var M int
+const MAXM = 40000
+
 const c_left_top = complex(-2, 2)
 const c_right_bottom = complex(2, -2)
 const NMAX = 100
@@ -21,12 +24,21 @@ var rlen float64
 var ilen float64
 
 func main() {
+	fmt.Sscan(os.Args[1], &M)
+	if (M > MAXM) {
+		fmt.Printf("The picture size %dx%d is too big. Exit.\n", M, M)
+		return
+	}
+	fmt.Sscan(os.Args[2], &depth)	
+	if (depth > MAXDEPTH) {
+		fmt.Printf("The number of threads(%d) is too big. Exit.\n", 1 << depth)
+		return
+	}
+
 	rlen = real(c_right_bottom) - real(c_left_top)
 	ilen = imag(c_right_bottom) - imag(c_left_top)
 	step = rlen / (float64)(M)
-	fmt.Println(os.Args[1])
-	fmt.Sscan(os.Args[2], &M)
-	fmt.Sscan(os.Args[1], &depth)
+
 	Mandelbrot()
 }
 
@@ -37,6 +49,7 @@ func Mandelbrot() {
 	RecDraw(canvas, c_left_top, c_right_bottom, depth)
 	for i := 0; i < (1 << depth); i++ {
 		<- complete
+		fmt.Println("completed")
 	}
 
 	img := canvas.SubImage(r)
@@ -54,7 +67,7 @@ func RecDraw(canvas *image.Gray, c1, c2 complex128, depth uint) {
 }
 
 func DrawMandelbrot(canvas *image.Gray, c1, c2 complex128) {
-	fmt.Println(c1, c2)
+	fmt.Println("DrawMandelbrot: ", c1, c2)
 	for re := real(c1); re < real(c2); re += step {
 		for im := imag(c1); im > imag(c2); im -= step {
 			c := complex(re, im)
