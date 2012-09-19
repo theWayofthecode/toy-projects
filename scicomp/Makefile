@@ -1,2 +1,2 @@
-jacobi: jacobi.go
-	go build jacobi.go
+jacobi: lineq.go
+	go build lineq.go

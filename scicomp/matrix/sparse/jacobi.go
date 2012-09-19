@@ -31,7 +31,7 @@ func Jacobi(A matrix.Matrix, b matrix.Vector) matrix.Vector {
 			start := iv.id * stride
 			end := start + stride
 			copy(diff[start:end], 
-				matrix.VecOpVec(iv.v, x[start:end], func(v1 float64, v2 float64) float64 {return v1 - v2}))
+				matrix.VecOpVec(iv.v, x[start:end], matrix.Minus))
 			copy(x[start:end], iv.v)
 		}
 		if (matrix.Norm(diff) < Er) {

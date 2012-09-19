@@ -9,10 +9,15 @@ import (
 
 func main() {
     t := matrix.MatAlloc(6, 6)
-    t.InitTridiag(2, 5, 3)
+    t.InitTridiag(1, 4, 1)
+    if (t.IsSymmetric()) {
+    	fmt.Println("t is symmetric")
+    }
  	var y matrix.Vector
- 	y = append(y, 5, 6, 6, 6, 5, 5)
+ 	y = append(y, 5, 6, 6, 6, 6, 5)
  	x := sparse.Jacobi(t, y)
+	fmt.Println(x)
+ 	x = sparse.ConjugateGradient(t, y)
 	fmt.Println(x)
 }
 

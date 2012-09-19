@@ -7,6 +7,10 @@ import (
 type Matrix [][]float64
 type Vector []float64
 
+/**
+*	Method Declarations
+*/
+
 func (m Matrix) InitTridiag(b float64, d float64, a float64) {
 	for i := 0; i < len(m); i++ {
 		for j := 0; j < len(m[0]); j++ {
@@ -19,6 +23,41 @@ func (m Matrix) InitTridiag(b float64, d float64, a float64) {
 			}
 		}
 	}
+}
+
+func (A Matrix) IsSymmetric() bool {
+	for i := 0; i < len(A); i++ {
+		for j := i; j < len(A[0]); j++ {
+			if (A[i][j] != A[j][i]) {
+				return false
+			}
+		}
+	}
+	return true
+}
+	
+func (v Vector) Scale(a float64) {
+	for i := 0; i < len(v); i++ {
+		v[i] *= a
+	}
+}
+
+func (v Vector) OpVec(v1 Vector, op func(float64, float64) float64) {
+	for i := 0; i < len(v); i++ {
+		v[i] = op(v[i], v1[i])
+	}
+}
+
+/**
+*	Function Declarations
+*/
+
+func VecScale(v Vector, a float64) Vector {
+	av := VecAlloc(len(v))
+	for i := 0; i < len(av); i++ {
+		av[i] = a * v[i]
+	}
+	return av
 }
 
 func MatAlloc(m int, n int) Matrix {
@@ -59,6 +98,9 @@ func VecOpVec(v1, v2 Vector, op func(float64, float64) float64) Vector {
 	return v
 }
 
+func Plus(v1 float64, v2 float64) float64 {return v1 + v2}
+func Minus(v1 float64, v2 float64) float64 {return v1 - v2}
+
 func LDU(m Matrix) (d Vector, lu Matrix) {
 	lu = make([][]float64, len(m))
 	d = make([]float64, len(m))
@@ -80,4 +122,3 @@ func Norm(v Vector) float64 {
 	}
 	return math.Sqrt(sum)
 }
-	
